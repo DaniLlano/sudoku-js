@@ -1,0 +1,152 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap');
+
+:root {
+    --bg-body: #fff;
+    --color-txt: #000;
+    --filled-color: #000;
+    --filled-bg: #caf0f8;
+
+    --white: #fff;
+    --blue: #00aeef;
+    --red: #e91e63;
+    --black: #000;
+
+    --nav-size: 70px;
+    --sudoku-cell-size: 50px;
+
+    --border-radius: 10px;
+
+    --space-y: 20px;
+
+    --gap: 5px;
+
+    --font-size: 1.5rem;
+    --font-size-lg: 2rem;
+    --font-size-xl: 3rem;
+}
+
+.dark {
+    --bg-main: #2a2a38;
+    --bg-body: #1a1a2e;
+    --color-txt: #6a6a6a;
+    --filled-color: #4f4f63;
+    --filled-bg: #000;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    font-family: 'Rubik', sans-serif;
+}
+
+body {
+    height: 100vh;
+    background-color: var(--bg-body);
+    overflow-x: hidden;
+    user-select: none;
+}
+
+input {
+    border: 2px solid var(--bg-main);
+    color: var(--color-txt);
+}
+
+input:hover,
+input:focus {
+    border-color: var(--blue);
+}
+
+a {
+    text-decoration: none;
+    color: unset;
+}
+
+ul {
+    list-style: none;
+}
+
+nav {
+    background-color: var(--bg-body);
+    color: var(--color-txt);
+    position: fixed;
+    top: 0;
+    height: var(--nav-size);
+    width: 100%;
+    box-shadow: 5px 2px var(--bg-main);
+    z-index: 99;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.dark-mode-toggle {
+    color: var(--blue);
+    font-size: var(--font-size-lg);
+    cursor: pointer;
+    padding: 1.5rem;
+}
+
+#sunny-outline {
+    display: none;
+}
+
+#moon-outline {
+    display: inline-block;
+}
+
+.dark #sunny-outline {
+    display: inline-block;
+}
+
+.dark #moon-outline {
+    display: none;
+}
+
+.main {
+    height: 100vh;
+    padding-top: var(--nav-size);
+    display: grid;
+    place-items: center;
+}
+
+.screen {
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+    min-width: 400px;
+}
+
+.start-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.start-screen.active {
+    transform: translateX(0);
+}
+
+.start-screen > * + * {
+    margin-top: 20px;
+}
+
+.input-name {
+    height: 80px;
+    width: 280px;
+    border-radius: var(--border-radius);
+    outline: 0;
+    background-color: var(--bg-main);
+    padding: 20px;
+    font-size: var(--font-size-lg);
+    text-align: center;
+}
