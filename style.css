@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap');
 
 :root {
+    --bg-main: #f0f2f5;
     --bg-body: #fff;
     --color-txt: #000;
     --filled-color: #000;
@@ -149,4 +150,42 @@ nav {
     padding: 20px;
     font-size: var(--font-size-lg);
     text-align: center;
+}
+
+.btn {
+    height: 80px;
+    width: 280px;
+    background-color: var(--bg-main);
+    color: var(--color-txt);
+    border-radius: var(--border-radius);
+    display: grid;
+    place-items: center;
+    transition: width 0.3s ease-in-out;
+    overflow: hidden;
+    font-size: var(--font-size-lg);
+}
+
+.btn-blue {
+    background-color: var(--blue);
+    color: var(--white);
+}
+
+.input-err {
+    border-color: var(--red);
+    animation: bounce 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes bounce {
+    0% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(20px);
+    }
+    50% {
+        transform: translateX(-20px);
+    }
+    100% {
+        transform: translateX(0);
+    }
 }
