@@ -6,6 +6,8 @@ document.querySelector('#dark-mode-toggle').addEventListener('click', () => {
     document.querySelector('meta[name="theme-color"').setAttribute('content', isDarkMode ? '#1a1a2e' : '#fff')
 })
 
+const cells = document.querySelector('.main-grid-cell');
+
 const name_input = document.querySelector('#input-name');
 const start_screen = document.querySelector('#start-screen');
 
@@ -32,6 +34,19 @@ document.querySelector('#btn-play').addEventListener('click', () => {
 
 const getGameInfo = () => JSON.parse(localStorage.getItem('game'));
 
+// add space for each 9 cells
+const initGameGrid = () => {
+    let index = 0;
+    for (let i = 0; i < Math.pow(CONSTANT.GRID_SIZE, 2); i++) {
+        let row = Math.floor(i / CONSTANT.GRID_SIZE);
+        let col = i % CONSTANT.GRID_SIZE;
+        if (row === 2 || row === 5) cells[index].style.marginBottom = '10px';
+        if (col === 2 || col === 5) cells[index].style.marginRight = '10px';
+
+        index++
+    }
+}
+
 const init = () => {
     const darkmode = JSON.parse(localStorage.getItem('darkmode'));
     document.body.classList.add(darkmode ? 'dark' : 'light');
@@ -40,6 +55,8 @@ const init = () => {
     const game = getGameInfo();
 
     document.querySelector('#btn-continue').style.display = game ? 'grid' : 'none';
+
+    initGameGrid();
 }
 
 init();
