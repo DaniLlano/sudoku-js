@@ -6,7 +6,7 @@ document.querySelector('#dark-mode-toggle').addEventListener('click', () => {
     document.querySelector('meta[name="theme-color"').setAttribute('content', isDarkMode ? '#1a1a2e' : '#fff')
 })
 
-const cells = document.querySelector('.main-grid-cell');
+const cells = document.querySelectorAll('.main-grid-cell');
 
 const name_input = document.querySelector('#input-name');
 const start_screen = document.querySelector('#start-screen');
@@ -43,7 +43,7 @@ const initGameGrid = () => {
         if (row === 2 || row === 5) cells[index].style.marginBottom = '10px';
         if (col === 2 || col === 5) cells[index].style.marginRight = '10px';
 
-        index++
+        index++;
     }
 }
 
