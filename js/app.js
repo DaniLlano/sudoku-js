@@ -8,6 +8,7 @@ document.querySelector('#dark-mode-toggle').addEventListener('click', () => {
 
 const start_screen = document.querySelector('#start-screen');
 const game_screen = document.querySelector('#game-screen');
+const pause_screen = document.querySelector('#pause-screen');
 
 const cells = document.querySelectorAll('.main-grid-cell');
 
@@ -59,9 +60,17 @@ const startGame = () => {
         if (!pause) {
             seconds = seconds + 1;
             game_time.innerHTML = showTime(seconds);
-            console.log(seconds)
         }
     }, 1000)
+}
+
+const returnStartScreen = () => {
+    clearInterval(timer);
+    pause = false;
+    seconds = 0;
+    start_screen.classList.add('active');
+    game_screen.classList.remove('active');
+    pause_screen.classList.remove('active');
 }
 
 document.querySelector('#btn-level').addEventListener('click', (e) => {
@@ -72,14 +81,28 @@ document.querySelector('#btn-level').addEventListener('click', (e) => {
 
 document.querySelector('#btn-play').addEventListener('click', () => {
     if (name_input.value.trim().length > 0) {
-        startGame()
+        startGame();
     } else {
         name_input.classList.add('input-err');
         setTimeout(() => {
             name_input.classList.remove('input-err');
-            name_input.focus()
+            name_input.focus();
         }, 500);
     }
+})
+
+document.querySelector('#btn-pause').addEventListener('click', () => {
+    pause_screen.classList.add('active');
+    pause = false;
+})
+
+document.querySelector('#btn-resume').addEventListener('click', () => {
+    pause_screen.classList.remove('active');
+    pause = false;
+})
+
+document.querySelector('#btn-new-game').addEventListener('click', () => {
+    returnStartScreen();
 })
 
 const init = () => {
@@ -92,6 +115,12 @@ const init = () => {
     document.querySelector('#btn-continue').style.display = game ? 'grid' : 'none';
 
     initGameGrid();
+
+    if (getPlayerName()) {
+        name_input.value = getPlayerName();
+    } else {
+        name_input.focus();
+    }
 }
 
 init();
