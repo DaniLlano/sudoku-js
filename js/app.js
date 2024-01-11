@@ -14,9 +14,11 @@ const cells = document.querySelectorAll('.main-grid-cell');
 
 const name_input = document.querySelector('#input-name');
 
+const number_inputs = document.querySelectorAll('.number');
+
 const player_name = document.querySelector('#player-name');
 const game_level = document.querySelector('#game-level');
-const game_time = document.querySelector('#game-time')
+const game_time = document.querySelector('#game-time');
 
 let level_index = 0;
 let level = CONSTANT.LEVEL[level_index];
@@ -67,7 +69,9 @@ const initSudoku = () => {
     su = sudokuGen(level);
     su_answer = [...su.question];
 
-    console.table(su_answer);
+    seconds = 0;
+
+    saveGameInfo();
 
     // show sudoku to div
     for (let i = 0; i < Math.pow(CONSTANT.GRID_SIZE, 2); i++) {
@@ -79,6 +83,33 @@ const initSudoku = () => {
         if (su.question[row][col] !== 0) {
             cells[i].classList.add('filled');
             cells[i].innerHTML = su.question[row][col];
+        }
+    }
+}
+
+const loadSudoku = () => {
+    let game = getGameInfo();
+
+    game_level.innerHTML = CONSTANT.LEVEL_NAME[game.level];
+
+    su = game.su;
+
+    su_answer = su.answer;
+
+    seconds = game.seconds;
+    game_time.innerHTML = showTime(seconds);
+
+    level_index = game.level;
+
+    for (let i = 0; i < Math.pow(CONSTANT.GRID_SIZE, 2); i++) {
+        let row = Math.floor(i / CONSTANT.GRID_SIZE);
+        let col = i % CONSTANT.GRID_SIZE;
+
+        cells[i].setAttribute('data-value', su_answer[row][col]);
+        cells[i].innerHTML = su_answer[row][col] !== 0 ? su_answer[row][col] : '';
+
+        if (su.question[row][col] !== 0) {
+            cells[i].classList.add('filled');
         }
     }
 }
@@ -131,10 +162,6 @@ const checkErr = (value) => {
     const addErr = (cell) => {
         if (parseInt(cell.getAttribute('data-value')) === value) {
             cell.classList.add('err');
-            cell.classList.add('cell-err');
-            setTimeout(() => {
-                cell.classList.remove('cell-err');
-            }, 500);
         }
     }
 
@@ -176,6 +203,63 @@ const checkErr = (value) => {
         addErr(cells[index + step]);
         step += 1;
     }
+}
+
+const removeErr = () => cells.forEach(e => e.classList.remove('err'));
+
+const saveGameInfo = () => {
+    let game = {
+        level: level_index,
+        seconds: seconds,
+        su: {
+            original: su.original,
+            question: su.question,
+            answer: su_answer
+        }
+    }
+    localStorage.setItem('game', JSON.stringify(game));
+}
+
+const removeGameInfo = () => {
+    localStorage.removeItem('game');
+    document.querySelector('#btn-continue').style.display = 'none';
+}
+
+const isGameWin = () => sudokuCheck(su_answer);
+
+const showResults = () => {
+    clearInterval(timer);
+}
+
+const initNumberInputEvent = () => {
+    number_inputs.forEach((e, index) => {
+        e.addEventListener('click', () => {
+            if (!cells[selected_cell].classList.contains('filled')) {
+                cells[selected_cell].innerHTML = index + 1;
+                cells[selected_cell].setAttribute('data-value', index + 1);
+                // add to answer
+                let row = Math.floor(selected_cell / CONSTANT.GRID_SIZE);
+                let col = selected_cell % CONSTANT.GRID_SIZE;
+                su_answer[row][col] = index + 1;
+
+                // save game
+                saveGameInfo();
+
+                removeErr();
+                checkErr(index + 1);
+                cells[selected_cell].classList.add('zoom-in');
+                setTimeout(() => {
+                    cells[selected_cell].classList.remove('zoom-in');
+                }, 500);
+
+                // check game win
+                if (isGameWin()) {
+                    removeGameInfo();
+                    showResults();
+                }
+            }
+        })
+    })
 }
 
 const initCellsEvent = () => {
@@ -242,6 +326,19 @@ document.querySelector('#btn-play').addEventListener('click', () => {
     }
 })
 
+document.querySelector('#btn-continue').addEventListener('click', () => {
+    if (name_input.value.trim().length > 0) {
+        loadSudoku();
+        startGame();
+    } else {
+        name_input.classList.add('input-err');
+        setTimeout(() => {
+            name_input.classList.remove('input-err');
+            name_input.focus();
+        }, 500);
+    }
+})
+
 document.querySelector('#btn-pause').addEventListener('click', () => {
     pause_screen.classList.add('active');
     pause = false;
@@ -256,6 +353,18 @@ document.querySelector('#btn-new-game').addEventListener('click', () => {
     returnStartScreen();
 })
 
+document.querySelector('#btn-delete').addEventListener('click', () => {
+    cells[selected_cell].innerHTML = '';
+    cells[selected_cell].setAttribute('data-value', 0);
+
+    let row = Math.floor(selected_cell / CONSTANT.GRID_SIZE);
+    let col = selected_cell % CONSTANT.GRID_SIZE;
+
+    su_answer[row][col] = 0;
+
+    removeErr();
+})
+
 const init = () => {
     const darkmode = JSON.parse(localStorage.getItem('darkmode'));
     document.body.classList.add(darkmode ? 'dark' : 'light');
@@ -267,6 +376,7 @@ const init = () => {
 
     initGameGrid();
     initCellsEvent();
+    initNumberInputEvent();
 
     if (getPlayerName()) {
         name_input.value = getPlayerName();
