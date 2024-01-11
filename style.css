@@ -313,7 +313,8 @@ nav {
     cursor: pointer;
 }
 
-.pause-screen {
+.pause-screen,
+.result-screen {
     position: absolute;
     top: 0;
     left: 0;
@@ -326,16 +327,34 @@ nav {
     display: none;
 }
 
-.pause-screen.active {
+.pause-screen.active,
+.result-screen.active {
     display: flex;
 }
 
-.pause-screen > * + * {
+.pause-screen > * + *,
+.result-screen > * + * {
     margin-top: 20px;
 }
 
-.pause-screen.active .btn {
-    animation: zoom-in .5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+.pause-screen.active .btn,
+.result-screen.active div {
+    animation: zoom-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.result-screen .congrate {
+    font-size: var(--font-size-xl);
+    color: var(--blue);
+}
+
+.result-screen .info {
+    font-size: var(--font-size);
+    color: var(--color-txt);
+}
+
+#result-time {
+    font-size: var(--font-size-xl);
+    color: var(--blue);
 }
 
 @keyframes zoom-in {

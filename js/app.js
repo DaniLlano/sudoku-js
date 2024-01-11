@@ -9,6 +9,7 @@ document.querySelector('#dark-mode-toggle').addEventListener('click', () => {
 const start_screen = document.querySelector('#start-screen');
 const game_screen = document.querySelector('#game-screen');
 const pause_screen = document.querySelector('#pause-screen');
+const result_screen = document.querySelector('#result-screen');
 
 const cells = document.querySelectorAll('.main-grid-cell');
 
@@ -19,6 +20,8 @@ const number_inputs = document.querySelectorAll('.number');
 const player_name = document.querySelector('#player-name');
 const game_level = document.querySelector('#game-level');
 const game_time = document.querySelector('#game-time');
+
+const result_time = document.querySelector('#result-time');
 
 let level_index = 0;
 let level = CONSTANT.LEVEL[level_index];
@@ -229,6 +232,8 @@ const isGameWin = () => sudokuCheck(su_answer);
 
 const showResults = () => {
     clearInterval(timer);
+    result_screen.classList.add('active');
+    result_time.innerHTML = showTime(seconds);
 }
 
 const initNumberInputEvent = () => {
@@ -305,6 +310,7 @@ const returnStartScreen = () => {
     start_screen.classList.add('active');
     game_screen.classList.remove('active');
     pause_screen.classList.remove('active');
+    result_screen.classList.remove('active');
 }
 
 document.querySelector('#btn-level').addEventListener('click', (e) => {
@@ -350,6 +356,10 @@ document.querySelector('#btn-resume').addEventListener('click', () => {
 })
 
 document.querySelector('#btn-new-game').addEventListener('click', () => {
+    returnStartScreen();
+})
+
+document.querySelector('#btn-new-game-2').addEventListener('click', () => {
     returnStartScreen();
 })
 
